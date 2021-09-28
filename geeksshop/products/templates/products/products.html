@@ -1,8 +1,8 @@
 {% extends 'products/base.html' %}
 {% load static %}
 
-    {% block title %}{{title|title}}{% endblock %}
-    <!-- <title>GeekShop - Каталог</title> -->
+{% block title %}{{title|title}}{% endblock %}
+<!-- <title>GeekShop - Каталог</title> -->
 
 <body>
 
@@ -38,13 +38,16 @@
                 </ol>
                 <div class="carousel-inner" role="listbox">
                     <div class="carousel-item active">
-                        <img class="d-block img-fluid" src="{% static 'vendor/img/slides/slide-1.jpg' %}" alt="First slide">
+                        <img class="d-block img-fluid" src="{% static 'vendor/img/slides/slide-1.jpg' %}"
+                             alt="First slide">
                     </div>
                     <div class="carousel-item">
-                        <img class="d-block img-fluid" src="{% static 'vendor/img/slides/slide-2.jpg' %}" alt="Second slide">
+                        <img class="d-block img-fluid" src="{% static 'vendor/img/slides/slide-2.jpg' %}"
+                             alt="Second slide">
                     </div>
                     <div class="carousel-item">
-                        <img class="d-block img-fluid" src="{% static 'vendor/img/slides/slide-3.jpg' %}" alt="Third slide">
+                        <img class="d-block img-fluid" src="{% static 'vendor/img/slides/slide-3.jpg' %}"
+                             alt="Third slide">
                     </div>
                 </div>
                 <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
@@ -59,22 +62,21 @@
 
             <div class="row">
 
-                
-                {% for item in items %}
-                    
+
+                {% for product in products %}
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="card h-100">
                         <a href="#">
                             <img class="card-img-top"
-                                 src="{% static item.url %}"
+                                 src="{{ media }}{{ product.image }}"
                                  alt="">
                         </a>
                         <div class="card-body">
                             <h4 class="card-title">
-                                <a href="#">{{ item.title }}</a>
+                                <a href="#">{{ product.products_name }}</a>
                             </h4>
-                            <h5>{{ items.price }}</h5>
-                            <p class="card-text">{{ item.content }}</p>
+                            <h5>{{ product.products_price }}</h5>
+                            <p class="card-text">{{ product.products_descriptions }}</p>
                         </div>
                         <div class="card-footer text-center">
                             <button type="button" class="btn btn-outline-success">Отправить в корзину</button>
