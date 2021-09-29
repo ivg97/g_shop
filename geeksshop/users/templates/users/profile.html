@@ -11,10 +11,6 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-7">
-            {% if form.errors %}
-            {{ ergsvfdrf }}
-
-            {% endif %}
                 {% if form.errors or messages %}
 
                     <div class="alert {% if messages %} alert-success {% else %} alert-warning {% endif %} alert-dismissible fade show" role="alert"
