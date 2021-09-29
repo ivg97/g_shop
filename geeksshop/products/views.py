@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.conf import settings
+
 
 from .models import Products
 
@@ -15,6 +15,4 @@ def index(request):
 
 def products(request):
     products = Products.objects.all()
-    media = settings.MEDIA_URL
-    return render(request, 'products/products.html', {'products': products,
-                                                      'media': media})
+    return render(request, 'products/products.html', {'products': products})
