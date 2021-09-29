@@ -1,15 +1,15 @@
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 from django import forms
 from django.core import validators
 
 from .models import User
+
 
 class UserLoginForms(AuthenticationForm):
     # username = forms.CharField(validators=[validators.MaxValueValidator(25,
     #                                         message='Длина имени пользователя не может быть более 25 символов'),
     #                                        validators.MinValueValidator(2,
     #                                         message='Длина имени пользователя не может быть менее 2-х символов')])
-
 
     class Meta:
         model = User
@@ -23,10 +23,7 @@ class UserLoginForms(AuthenticationForm):
             field.widget.attrs['class'] = 'form-control py-4'
 
 
-
 class UserRegisterForms(UserCreationForm):
-
-
     class Meta:
         model = User
         fields = ('username', 'email', 'first_name', 'last_name', 'password1', 'password2',)
@@ -41,3 +38,28 @@ class UserRegisterForms(UserCreationForm):
         self.fields['password2'].widget.attrs['placeholder'] = 'Повторите пароль'
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control py-4'
+
+
+class UserProfileForm(UserChangeForm):
+
+    image = forms.ImageField(widget=forms.FileInput(), required=False)
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'first_name', 'last_name', 'image')
+
+
+    def __init__(self, *args, **kwargs):
+        super(UserProfileForm, self).__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs['readonly'] = True
+        self.fields['email'].widget.attrs['readonly'] = True
+
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control py-4'
+        self.fields['image'].widget.attrs['class'] = 'custom-file-input'
+
+    def clean_image(self):
+        data = self.cleaned_data['image']
+        if data.size > 1048576:
+            raise forms.ValidationError('Файл не может быть больше 1 Мб')
+        return data
