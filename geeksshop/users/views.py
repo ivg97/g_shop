@@ -58,7 +58,7 @@ def profile(request):
             return HttpResponseRedirect(reverse('users:profile'))
         else:
             print(form.errors)
-            # print(messages)
+            messages.error(request, 'Изменения не сохранены!')
 
 
     context = {
