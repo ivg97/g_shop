@@ -28,7 +28,7 @@ urlpatterns = [
     path('', index, name='index'),
     path('products/', include('products.urls'), name='products'),
     path('users/', include('users.urls'), name='users'),
-    path('bascats/', include('baskats.urls'), name='baskats')
+    path('baskets/', include('baskats.urls'), name='baskets')
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
