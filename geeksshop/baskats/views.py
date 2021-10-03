@@ -30,7 +30,6 @@ def basket_remote(request, product_id):
 
 @login_required
 def basket_edit(request, id, quantity):
-    print(request.GET)
     if request.is_ajax():
         basket = Basket.objects.get(id=id)
         if quantity > 0:
