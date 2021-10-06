@@ -35,7 +35,7 @@
                                 </tfoot>
                                 <tbody>
                                 {% for user in users %}
-                                    <tr>
+                                    <tr {% if not user.is_active %} bgcolor="#d3d3d3" {% endif %}>
                                         <td><a href="{% url 'admins:admins_user_update' user.id %}"
                                                style="color: dodgerblue">{{ user.username }}</a></td>
                                         <td>{{ user.first_name }}</td>

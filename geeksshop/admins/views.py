@@ -6,11 +6,8 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.shortcuts import render
 
 from users.models import User
-
 from admins.forms import UserAdminRegisterForm, UserAdminProfileForm, CategoryCreateForm
-
 from geeksshop.mixin import CustomDispatchMixin
-
 from products.models import CategoryProducts
 
 
@@ -73,35 +70,47 @@ class UserDeleteView(DeleteView, CustomDispatchMixin):
         return HttpResponseRedirect(self.get_success_url())
 
 
-def category_list_view(request):
-    categories = CategoryProducts.objects.all()
-    context = {'categories': categories,
-               'title': 'Админка | Категории продуктов'}
-    return render(request, 'admins/categories-read.html', context)
+class CategoryListView(ListView, CustomDispatchMixin):
+    model = CategoryProducts
+    template_name = 'admins/categories-read.html'
+    context_object_name = 'categories'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(CategoryListView, self).get_context_data(**kwargs)
+        context['title'] = 'Админка | Категории'
+        return context
 
 
-def category_create(request):
-    if request.method == 'POST':
-        form = CategoryCreateForm(data=request.POST)
-        if form.is_valid():
-            name = request.POST['category_name']
-            descriptions = request.POST['category_description']
-            category = CategoryProducts.objects.create(category_name=name, category_description=descriptions)
-            category.save()
-            return HttpResponseRedirect(reverse('admins:category_list_view'))
-    else:
-        form = CategoryCreateForm()
+class CategoryCreateView(CreateView, CustomDispatchMixin):
+    model = CategoryProducts
+    template_name = 'admins/category_create.html'
+    form_class = CategoryCreateForm
+    success_url = reverse_lazy('admins:category_list_view')
 
-    context = {'title': 'Админка | Создание категории',
-               'form': form}
-    return render(request, 'admins/category_create.html', context)
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(CategoryCreateView, self).get_context_data(**kwargs)
+        context['title'] = 'Админка | Создание категории'
+        return context
 
 
-def category_update(request, pk):
-    category = CategoryProducts.objects.get(id=pk)
-    context = {'category': category}
-    return render(request, 'admins/category-update-delete.html', context)
+class CategoryUpdateView(UpdateView, CustomDispatchMixin):
+    model = CategoryProducts
+    template_name = 'admins/category-update-delete.html'
+    form_class = CategoryCreateForm
+    success_url = reverse_lazy('admins:category_list_view')
+    context_object_name = 'categories'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(CategoryUpdateView, self).get_context_data(**kwargs)
+        context['title'] = f'Админка | Редактирование категории | {self.object}'
+        return context
 
 
-def category_delete(request, id):
-    pass
+class CategoryDeleteView(DeleteView, CustomDispatchMixin):
+    model = CategoryProducts
+    template_name = 'admins/category-update-delete.html'
+    success_url = reverse_lazy('admins:category_list_view')
+
+    @method_decorator(user_passes_test(lambda u: u.is_superuser))
+    def dispatch(self, request, *args, **kwargs):
+        return super(CategoryDeleteView, self).dispatch(request, *args, **kwargs)

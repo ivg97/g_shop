@@ -56,7 +56,7 @@ def profile(request):
             return HttpResponseRedirect(reverse('users:profile'))
         else:
             print(form.errors)
-            # print(messages)
+
 
     context = {
         'title': 'Geekshop - Профиль',

@@ -18,5 +18,6 @@ def products(request):
     products = Products.objects.all()
     categories = CategoryProducts.objects.all()
     context = {'products': products,
-               'categories': categories}
+               'categories': categories,
+               'title': 'Каталог'}
     return render(request, 'products/products.html', context)
