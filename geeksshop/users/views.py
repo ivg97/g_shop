@@ -1,9 +1,12 @@
 from django.shortcuts import render, HttpResponseRedirect
 from django.contrib import auth
 from django.urls import reverse
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
-from .forms import UserLoginForms, UserRegisterForms
-# Create your views here.
+from .forms import UserLoginForms, UserRegisterForms, UserProfileForm
+from baskats.models import Basket
+
 
 def login(request):
 
@@ -16,8 +19,6 @@ def login(request):
             if user.is_active:
                 auth.login(request, user)
                 return HttpResponseRedirect(reverse('index'))
-        else:
-            print(form.errors)
     else:
         form = UserLoginForms()
     context = {
@@ -26,27 +27,50 @@ def login(request):
     }
     return render(request, 'users/login.html', context)
 
-
+@login_required
 def register(request):
     if request.method == 'POST':
         form = UserRegisterForms(data=request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Вы успешно зарегистрировались!')
             return HttpResponseRedirect(reverse('users:login'))
-        else:
-            print(form.errors)
     else:
         form = UserRegisterForms()
 
 
     context = {
         'title': 'Geekshop - Регистрация',
-        'form': form
+        'form': form,
+
     }
 
     return render(request, 'users/register.html', context)
 
 
+def profile(request):
+
+    if request.method == 'POST':
+        form = UserProfileForm(data=request.POST, instance=request.user, files=request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Изменения сохранены!')
+            return HttpResponseRedirect(reverse('users:profile'))
+        else:
+            print(form.errors)
+            messages.error(request, 'Изменения не сохранены!')
+
+
+    context = {
+        'title': 'Geekshop - Профиль',
+        'form': UserProfileForm(instance=request.user),
+        'baskets': Basket.objects.filter(user=request.user)
+    }
+    return render(request, 'users/profile.html', context)
+
 def logout(request):
     auth.logout(request)
     return HttpResponseRedirect(reverse('index'))
+
+
+
