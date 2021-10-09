@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from .models import Products, CategoryProducts
 
@@ -14,10 +14,22 @@ def index(request):
     return render(request, 'products/index.html', context)
 
 
-def products(request):
-    products = Products.objects.all()
-    categories = CategoryProducts.objects.all()
+def products(request, category_id=None, page_id=1):
+    if category_id == None:
+        products = Products.objects.all()
+    else:
+        products =Products.objects.filter(category_id=category_id)
+
+    paginator = Paginator(products, per_page=3)
+    try:
+        products_paginator = paginator.page(page_id)
+    except PageNotAnInteger:
+        products_paginator = paginator.page(1)
+    except EmptyPage:
+        products_paginator = paginator.page(paginator.num_pages)
+
     context = {'products': products,
-               'categories': categories,
+               'categories': CategoryProducts.objects.all(),
                'title': 'Каталог'}
+    context.update({'products': products_paginator})
     return render(request, 'products/products.html', context)
