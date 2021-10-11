@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'products',
     'users',
     'baskats',
+    'admins',
 ]
 
 MIDDLEWARE = [
@@ -144,6 +145,7 @@ AUTH_USER_MODEL = 'users.User'
 
 LOGIN_URL = '/users/login/'
 
+LOGIN_REDIRECT_URL = '/'
 
 
 
