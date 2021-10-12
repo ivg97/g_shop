@@ -29,11 +29,11 @@
                                 </tfoot>
                                 <tbody>
                                 {% for category in categories %}
-                                    <tr>
+                                    <tr style="{% if not category.active %} background-color: lightgray {% endif %}">
                                         <td><a href="{% url 'admins:category_update' category.id %}"
                                                style="color: dodgerblue">{{ category.category_name }}</a></td>
                                         <td>{{ category.category_description }}</td>
-                                        <td>Активно</td>
+                                        <td>{{ category.active }}</td>
 
                                     </tr>
                                 {% endfor %}
