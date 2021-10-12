@@ -38,6 +38,8 @@ class UserCreateView(CreateView, CustomDispatchMixin):
         return context
 
 
+
+
 class UserUpdateView(UpdateView, CustomDispatchMixin):
     model = User
     template_name = 'admins/admin-users-update-delete.html'
