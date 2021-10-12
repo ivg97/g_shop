@@ -111,6 +111,22 @@ class CategoryDeleteView(DeleteView, CustomDispatchMixin):
     template_name = 'admins/category-update-delete.html'
     success_url = reverse_lazy('admins:category_list_view')
 
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.object.active:
+            self.object.active = False
+            self.object.save()
+            for product in Products.objects.filter(category_id=self.object.id):
+                product.active = False
+                product.save()
+        else:
+            self.object.active = True
+            self.object.save()
+            for product in Products.objects.filter(category_id=self.object.id):
+                product.active = True
+                product.save()
+        return HttpResponseRedirect(self.get_success_url())
+
 
 
 class ProductsAdminListView(ListView, CustomDispatchMixin):
@@ -151,3 +167,13 @@ class ProductsAdminDeleteView(DeleteView, CustomDispatchMixin):
     model = Products
     template_name = 'admins/products-update-delete.html'
     success_url = reverse_lazy('admins:products_list_view')
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.object.active:
+            self.object.active = False
+            self.object.save()
+        else:
+            self.object.active = True
+            self.object.save()
+        return HttpResponseRedirect(self.get_success_url())

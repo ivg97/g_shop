@@ -4,6 +4,7 @@ from django.db import models
 class CategoryProducts(models.Model):
     name = models.CharField(max_length=50, unique=True, name='category_name')
     description = models.TextField(max_length=200, blank= True, name='category_description')
+    active = models.BooleanField(default=True, name='active')
 
     def __str__(self):
         return self.category_name
@@ -15,6 +16,7 @@ class Products(models.Model):
     image = models.ImageField(upload_to='products_image', blank=True)
     quantity = models.PositiveIntegerField(default=0)
     category = models.ForeignKey(CategoryProducts, on_delete=models.CASCADE)
+    active = models.BooleanField(default=True, name='active')
 
     def __str__(self):
         return f'{self.products_name}'
