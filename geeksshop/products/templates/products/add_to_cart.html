@@ -1,0 +1,21 @@
+<div class="add-to-cart">
+    <div class="card h-100">
+        <a href="#">
+            <img class="card-img-top"
+                 src="{{ product.image.url }}"
+                 alt="">
+        </a>
+        <div class="card-body">
+            <h4 class="card-title">
+                <a href="#">{{ product.products_name }}</a>
+            </h4>
+            <h5>{{ product.products_price }}</h5>
+            <p class="card-text">{{ product.products_descriptions }}</p>
+        </div>
+
+        <div class="card-footer text-center">
+            <a href="{% url 'baskets:basket_add' product.id %}"
+               class="btn btn-outline-success" name="{{ product.id }}">Отправить в корзину</a>
+        </div>
+    </div>
+</div>
