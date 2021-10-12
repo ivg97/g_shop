@@ -73,6 +73,7 @@ def profile(request):
             return HttpResponseRedirect(reverse('users:profile'))
         else:
             print(form.errors)
+            messages.error(request, 'Изменения не сохранены!')
 
     context = {
         'title': 'Geekshop - Профиль',
