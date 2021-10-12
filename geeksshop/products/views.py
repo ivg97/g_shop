@@ -16,9 +16,9 @@ def index(request):
 
 def products(request, category_id=None, page_id=1):
     if category_id == None:
-        products = Products.objects.all()
+        products = Products.objects.filter(active=True)
     else:
-        products =Products.objects.filter(category_id=category_id)
+        products =Products.objects.filter(category_id=category_id).filter(active=True)
 
     paginator = Paginator(products, per_page=3)
     try:
@@ -29,7 +29,7 @@ def products(request, category_id=None, page_id=1):
         products_paginator = paginator.page(paginator.num_pages)
 
     context = {'products': products,
-               'categories': CategoryProducts.objects.all(),
+               'categories': CategoryProducts.objects.filter(active=True),
                'title': 'Каталог'}
     context.update({'products': products_paginator})
     return render(request, 'products/products.html', context)

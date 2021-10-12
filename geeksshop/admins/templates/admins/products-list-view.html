@@ -39,11 +39,12 @@
                                     <th>Изображение</th>
                                     <th>Описание</th>
                                     <th>На складе</th>
+
                                 </tr>
                                 </tfoot>
                                 <tbody>
                                 {% for product in products %}
-                                    <tr>
+                                    <tr style="{% if not product.active %} background-color: lightgray  {% endif %} ">
                                         <td><a href="{% url 'admins:products_update' product.id %}"
                                                style="color: dodgerblue">{{ product.products_name }}</a></td>
                                         <td>{{ product.category }}</td>
