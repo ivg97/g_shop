@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'users',
     'baskats',
     'admins',
+    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -185,3 +186,12 @@ EMAIL_HOST_USER, EMAIL_HOST_PASSWORD = None, None
 # EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 # EMAIL_USE_SSL = True
 
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'social_core.backends.vk.VKOAuth2',
+)
+
+SOCIAL_AUTH_VK_OAUTH2_KEY = '7977969'
+SOCIAL_AUTH_VK_OAUTH2_SECRET = '0bVRP6tgOk0UV9Eooh9N'
+SOCIAL_AUTH_VK_OAUTH2_API_VERSION = '5.131'
