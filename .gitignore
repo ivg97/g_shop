@@ -2,6 +2,6 @@
 db.sqlite3
 /venv
 /media
-*/__pycache__/
+__pycache__/
 /geeksshop/.env
 
