@@ -5,7 +5,7 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, User
 from django import forms
 from django.core import validators
 
-from .models import User
+from .models import User, UserProfile
 
 
 class UserLoginForms(AuthenticationForm):
@@ -24,6 +24,7 @@ class UserLoginForms(AuthenticationForm):
         self.fields['password'].widget.attrs['placeholder'] = 'Введите пароль'
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control py-4'
+
 
 
 class UserRegisterForms(UserCreationForm):
@@ -72,3 +73,18 @@ class UserProfileForm(UserChangeForm):
     #     if data.size > 1048576:
     #         raise forms.ValidationError('Файл не может быть больше 1 Мб')
     #     return data
+
+class UserProfileEditForm(forms.ModelForm):
+
+    class Meta:
+        model = UserProfile
+        fields = ('tagline', 'about', 'gender', 'languages')
+
+    def __init__(self, *args, **kwargs):
+        super(UserProfileEditForm, self).__init__(*args, **kwargs)
+
+        for field_name, field in self.fields.items():
+            if field_name != 'gender':
+                field.widget.attrs['class'] = 'form-control py-4'
+            else:
+                field.widget.attrs['class'] = 'form-control'

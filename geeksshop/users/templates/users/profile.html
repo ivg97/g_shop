@@ -37,9 +37,10 @@
                     </div>
                 {% endif %}
                 <h4 class="mt-3 mb-3">Профиль</h4>
+{#                <p>{{ form.image }}as</p>#}
                 <div class="col-lg-12 text-center">
                     <img width="400" height="400"
-                         src="{% if user.image %} {{ user.image.url }} {% else %} {% static 'vendor/img/users/default_avatar.jpg' %}{% endif %}"
+                         src="{% if not user.image and not user.userprofile.image %}{% static 'vendor/img/users/default_avatar.jpg' %} {% else %}{% if user.userprofile.image %} {{ user.userprofile.image }} {% else %}{{ user.image.url }}{% endif %}{% endif %}"
                          class="img-thumbnail">
                 </div>
                 <form action="{% url 'users:profile' %}" method="post" enctype="multipart/form-data">
@@ -80,6 +81,26 @@
                         <div class="col-lg-4">
                             <label class="small mb-1" for="{{ form.age.id_for_label }}">Возраст</label>
                             {{ form.age }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-lg-4">
+                            <label class="small mb-1" for="{{ profile.gender.id_for_label }}">Пол</label>
+                            {{ profile.gender }}
+                        </div>
+                        <div class="col-lg-4">
+                            <label class="small mb-1" for="{{ profile.tagline.id_for_label }}">Теги</label>
+                            {{ profile.tagline }}
+                        </div>
+                        <div class="col-lg-4">
+                            <label class="small mb-1" for="{{ profile.languages.id_for_label }}">Языки</label>
+                            {{ profile.languages }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-lg-12">
+                            <label class="small mb-1" for="{{ profile.about.id_for_label }}">О себе</label>
+                            {{ profile.about }}
                         </div>
                     </div>
                     <div class="form-row">

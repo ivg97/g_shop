@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.utils.decorators import method_decorator
 from django.views.generic import FormView, UpdateView
 
-from .forms import UserLoginForms, UserRegisterForms, UserProfileForm
+from .forms import UserLoginForms, UserRegisterForms, UserProfileForm, UserProfileEditForm
 from baskats.models import Basket
 from geeksshop.mixin import BaseClassContextMixin
 from .models import User
@@ -23,6 +23,10 @@ class LoginListView(LoginView, BaseClassContextMixin):
     title = 'Geekshop - Авторизация'
 
 
+
+
+
+
 class RegisterListView(FormView, BaseClassContextMixin):
     model = User
     template_name = 'users/register.html'
@@ -31,8 +35,8 @@ class RegisterListView(FormView, BaseClassContextMixin):
     success_url = reverse_lazy('users:login')
 
     def post(self, request, *args, **kwargs):
-        form = UserRegisterForms(data=request.POST)
-        # form = self.form_class(data=request.POST)
+        # form = UserRegisterForms(data=request.POST)
+        form = self.form_class(data=request.POST)
         if form.is_valid():
             user = form.save()
             if send_verify_link(user):
@@ -60,15 +64,17 @@ class ProfileFormView(UpdateView, BaseClassContextMixin):
     def dispatch(self, request, *args, **kwargs):
         return super(ProfileFormView, self).dispatch(request, *args, **kwargs)
 
-    # def get_context_data(self, **kwargs):
-    #     context = super(ProfileFormView, self).get_context_data(**kwargs)
-    #     context['baskets'] = Basket.objects.filter(user=self.request.user)
-    #     return context
+    def get_context_data(self, **kwargs):
+        context = super(ProfileFormView, self).get_context_data(**kwargs)
+        context['profile'] = UserProfileEditForm(instance=self.request.user.userprofile)
+        return context
 
     def post(self, request, *args, **kwargs):
-        form = self.form_class(data=request.POST, files=request.FILES, instance=self.get_object())
-        if form.is_valid():
+        form = self.form_class(data=request.POST, files=request.FILES, instance=request.user)
+        form_edit = UserProfileEditForm(data=request.POST, instance=request.user.userprofile)
+        if form.is_valid() and form_edit.is_valid():
             form.save()
+            form_edit.save()
             return redirect(self.success_url)
         return redirect(self.success_url)
 

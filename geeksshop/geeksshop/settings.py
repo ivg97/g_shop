@@ -30,7 +30,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -45,6 +44,7 @@ INSTALLED_APPS = [
     'baskats',
     'admins',
     'social_django',
+
 ]
 
 MIDDLEWARE = [
@@ -71,13 +71,14 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'products.context_processors.basket',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
 ]
 
 WSGI_APPLICATION = 'geeksshop.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -88,7 +89,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -108,7 +108,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -121,7 +120,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
@@ -140,9 +138,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-
-
-
 # ACCOUNTS
 
 AUTH_USER_MODEL = 'users.User'
@@ -151,6 +146,7 @@ LOGIN_URL = '/users/login/'
 
 LOGIN_REDIRECT_URL = '/'
 
+LOGIN_ERROR_URL = '/'
 
 # MAIL
 
@@ -160,7 +156,6 @@ EMAIL_PORT = 25
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_USE_SSL = True if os.getenv('EMAIL_USE_SSL') == 'True' else False
-
 
 # DOMAIN_NAME = 'http:/localhost:8000'
 # EMAIL_HOST = 'localhost'
@@ -176,7 +171,7 @@ EMAIL_USE_SSL = True if os.getenv('EMAIL_USE_SSL') == 'True' else False
 # console
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST_USER, EMAIL_HOST_PASSWORD = None, None
- # python -m smtpd -n -c DebuggingServer localhost:25
+# python -m smtpd -n -c DebuggingServer localhost:25
 
 #  yandex
 # DOMAIN_NAME = 'http:/localhost:8000'
@@ -186,12 +181,32 @@ EMAIL_HOST_USER, EMAIL_HOST_PASSWORD = None, None
 # EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 # EMAIL_USE_SSL = True
 
+#
+# AUTHENTICATION_BACKENDS = (
+#     'django.contrib.auth.backends.ModelBackend',
+#     'social_core.backends.vk.VKOAuth2',
+# )
 
-AUTHENTICATION_BACKENDS = (
+SOCIAL_AUTH_VK_OAUTH2_KEY = os.getenv('SOCIAL_AUTH_VK_OAUTH2_KEY')
+SOCIAL_AUTH_VK_OAUTH2_SECRET = os.getenv('SOCIAL_AUTH_VK_OAUTH2_SECRET')
+SOCIAL_AUTH_VK_OAUTH2_API_VERSION = '5.131'
+SOCIAL_AUTH_VK_OAUTH2_IGNORE_DEFAULT_STORE = True
+SOCIAL_AUTH_VK_OAUTH2_SCORE = ['email']
+
+AUTHENTICATION_BACKENDS=(
     'django.contrib.auth.backends.ModelBackend',
     'social_core.backends.vk.VKOAuth2',
 )
 
-SOCIAL_AUTH_VK_OAUTH2_KEY = '7977969'
-SOCIAL_AUTH_VK_OAUTH2_SECRET = '0bVRP6tgOk0UV9Eooh9N'
-SOCIAL_AUTH_VK_OAUTH2_API_VERSION = '5.131'
+
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.create_user',
+    'users.pipelines.save_user_profile',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+)
