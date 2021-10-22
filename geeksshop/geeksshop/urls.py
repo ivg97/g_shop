@@ -31,6 +31,7 @@ urlpatterns = [
     path('baskets/', include('baskats.urls'), name='baskets'),
     path('admins/', include('admins.urls'), name='admins'),
     path('', include('social_django.urls'), name='social'),
+    path('orders/', include('orderapp.urls'), name='orders'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -93,11 +93,14 @@ def send_verify_link(user):
 
 
 def verify(request, email, activation_key):
-    user = User.objects.get(email=email)
-    if user and user.activation_key == activation_key and not user.is_activation_key_expired():
-        user.activation_key = ''
-        user.activation_key_created = None
-        user.is_active = True
-        user.save()
-        auth.login(request, user)
-    return render(request, 'users/verification.html')
+    try:
+        user = User.objects.get(email=email)
+        if user and user.activation_key == activation_key and not user.is_activation_key_expired():
+            user.activation_key = ''
+            user.activation_key_created = None
+            user.is_active = True
+            user.save()
+            auth.login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+        return render(request, 'users/verification.html')
+    except Exception as er:
+        return HttpResponseRedirect(reverse('index'))

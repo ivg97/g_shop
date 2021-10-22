@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'baskats',
     'admins',
     'social_django',
+    'orderapp'
 
 ]
 
@@ -180,12 +181,6 @@ EMAIL_HOST_USER, EMAIL_HOST_PASSWORD = None, None
 # EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 # EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 # EMAIL_USE_SSL = True
-
-#
-# AUTHENTICATION_BACKENDS = (
-#     'django.contrib.auth.backends.ModelBackend',
-#     'social_core.backends.vk.VKOAuth2',
-# )
 
 SOCIAL_AUTH_VK_OAUTH2_KEY = os.getenv('SOCIAL_AUTH_VK_OAUTH2_KEY')
 SOCIAL_AUTH_VK_OAUTH2_SECRET = os.getenv('SOCIAL_AUTH_VK_OAUTH2_SECRET')
