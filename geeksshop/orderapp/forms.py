@@ -23,3 +23,13 @@ class OrderItemsForm(forms.ModelForm):
         super(OrderItemsForm, self).__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control'
+
+class StatusForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ('status',)
+
+    def __init__(self, *args, **kwargs):
+        super(StatusForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'

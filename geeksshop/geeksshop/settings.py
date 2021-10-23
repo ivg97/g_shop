@@ -74,6 +74,7 @@ TEMPLATES = [
                 'products.context_processors.basket',
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
+                'orderapp.context_processors.status'
             ],
         },
     },

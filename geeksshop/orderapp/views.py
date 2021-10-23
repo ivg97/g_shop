@@ -124,3 +124,6 @@ def order_forming_complete(request, pk):
     order.status = Order.SEND_TO_PROCEED
     order.save()
     return HttpResponseRedirect(reverse('orders:list'))
+
+def status(request, status, order_id):
+    pass

@@ -3,6 +3,7 @@
 
 
 {% block content %}
+
     <div class="text-center">
         <div class="h2 text-center head">
             Ваши заказы,
@@ -12,6 +13,36 @@
                 Пользователь
             {% endif %}
         </div>
+        <style>
+            .dropdown {
+                position: relative;
+                display: inline-block;
+            }
+
+            /* Выпадающее содержимое (скрыто по умолчанию) */
+            .dropdown-content {
+                display: none;
+                position: absolute;
+                background-color: #f1f1f1;
+                min-width: 160px;
+                box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                z-index: 1;
+            }
+
+            /* Ссылки внутри выпадающего списка  */
+            .dropdown-content a {
+                color: black;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+            }
+
+            /* Изменение цвета выпадающих ссылок при наведении курсора */
+            .dropdown-content a:hover {background-color: deepskyblue}
+
+            /* Показать выпадающее меню */
+            .show {display:block;}
+        </style>
         <table class="table orders_list">
             <thead>
             <tr>
@@ -19,6 +50,10 @@
                 <th>Создан</th>
                 <th>Обновлен</th>
                 <th>Статус</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th>Изменить статус заказа</th>
             </tr>
             </thead>
             <tbody>
@@ -41,11 +76,25 @@
                                 </a>
                             {% endif %}
                         </td>
+
                         <td>
                             {% if item.status == 'FM' %}
                                 <a href="{% url 'orders:delete' item.pk %}">
                                     удалить
                                 </a>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if item.status == 'FM' %}
+                                <div class="dropdown">
+                                <button onclick="myFunction()" class="btn btn-light btn-round">Изменить</button>
+                                <div id="myDropdown" class="dropdown-content">
+                                        {% for s in status %}
+                                            <a href="" name="{{ item.pk }}">{{ s.1 }}</a>
+                                        {% endfor %}
+                                </div>
+                                </div>
+
                             {% endif %}
                         </td>
                     </tr>
@@ -65,4 +114,12 @@
             </a>
         </button>
     </div>
+    <script>
+
+        function myFunction() {
+            document.getElementById("myDropdown").classList.toggle("show");
+        }
+
+    </script>
 {% endblock %}
+
