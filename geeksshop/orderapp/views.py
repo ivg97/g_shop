@@ -1,7 +1,8 @@
 from django.db import transaction
 from django.forms import inlineformset_factory
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.shortcuts import render, get_object_or_404
+from django.template.loader import render_to_string
 from django.urls import reverse_lazy, reverse
 # Create your views here.
 
@@ -10,6 +11,8 @@ from orderapp.models import Order, OrderItem
 from geeksshop.mixin import BaseClassContextMixin
 from orderapp.forms import OrderItemsForm
 from baskats.models import Basket
+
+from products.models import Products
 
 
 class OrderList(ListView):
@@ -28,6 +31,7 @@ class OrderCreate(CreateView):
     def get_context_data(self, **kwargs):
         context = super(OrderCreate, self).get_context_data(**kwargs)
         context['title'] = 'Создать заказ'
+        context['price'] = None
 
 
         OrderFormSet = inlineformset_factory(Order, OrderItem, form=OrderItemsForm, extra=1)
@@ -61,7 +65,7 @@ class OrderCreate(CreateView):
             self.object = form.save()
             if order_items.is_valid():
                 order_items.instance = self.object
-                order_items.save()
+                order_items.instance.save()
 
             if self.object.get_total_cost() == 0:
                 self.object.delete()
@@ -101,7 +105,7 @@ class OrderUpdate(UpdateView):
             self.object = form.save()
             if order_items.is_valid():
                 order_items.instance = self.object
-                order_items.save()
+                order_items.instance.save()
 
             if self.object.get_total_cost() == 0:
                 self.object.delete()
@@ -126,4 +130,10 @@ def order_forming_complete(request, pk):
     return HttpResponseRedirect(reverse('orders:list'))
 
 def status(request, status, order_id):
+    '''не завершено, обновление статуса в заказах'''
     pass
+
+def add_pro(request, id):
+    '''не завершено, последняя строка товаров в заказе.'''
+    price = Products.objects.get(id=id).products_price
+    return HttpResponse(price)
