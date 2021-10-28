@@ -13,7 +13,7 @@ class CategoryProductsAdmin(admin.ModelAdmin):
 
 @admin.register(Products)
 class ProductsAdmin(admin.ModelAdmin):
-    list_display = ('products_name', 'category', 'products_price', 'quantity', 'image', 'products_descriptions', )
+    list_display = ('id','products_name', 'category', 'products_price', 'quantity', 'image', 'products_descriptions', )
     fields = ('products_name', 'image', 'products_descriptions', 'products_price', 'quantity', 'category')
     list_display_links = ('products_name',)
     readonly_fields = ('products_descriptions',) # только на чтение
