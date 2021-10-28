@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from users.models import User
 from admins.forms import UserAdminRegisterForm, UserAdminProfileForm, CategoryCreateForm, ProductsCreateForm
@@ -45,6 +45,7 @@ class UserUpdateView(UpdateView, CustomDispatchMixin):
     template_name = 'admins/admin-users-update-delete.html'
     form_class = UserAdminProfileForm
     success_url = reverse_lazy('admins:admins_user')
+
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(UserUpdateView, self).get_context_data(**kwargs)
@@ -106,6 +107,7 @@ class CategoryUpdateView(UpdateView, CustomDispatchMixin):
         context = super(CategoryUpdateView, self).get_context_data(**kwargs)
         context['title'] = f'Админка | Редактирование категории | {self.object}'
         return context
+
 
 
 class CategoryDeleteView(DeleteView, CustomDispatchMixin):
