@@ -1,7 +1,7 @@
 .idea
 db.sqlite3
 /venv
-/media
+
 __pycache__/
 /geeksshop/.env
 
