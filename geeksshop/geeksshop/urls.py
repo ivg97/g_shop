@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-
+import debug_toolbar
 from products.views import index
 
 
@@ -32,6 +32,7 @@ urlpatterns = [
     path('admins/', include('admins.urls'), name='admins'),
     path('', include('social_django.urls'), name='social'),
     path('orders/', include('orderapp.urls'), name='orders'),
+    path('^__debug_/', include(debug_toolbar.urls))
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

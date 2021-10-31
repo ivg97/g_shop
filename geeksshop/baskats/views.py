@@ -11,7 +11,7 @@ from .models import Basket
 @login_required
 def basket_add(request, product_id):
     product = Products.objects.get(id=product_id)
-    baskets = Basket.objects.filter(user=request.user, products=product)
+    baskets = Basket.objects.filter(user=request.user, products=product).select_related('products')
     if not baskets.exists():
         Basket.objects.create(user=request.user, products=product, quantity=1)
     else:
@@ -38,7 +38,7 @@ def basket_edit(request, id, quantity):
         else:
             basket.delete()
 
-        baskets = Basket.objects.filter(user=request.user)
+        baskets = Basket.objects.filter(user=request.user).select_related('products')
         context = {
             'baskets': baskets
         }

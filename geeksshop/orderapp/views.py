@@ -58,6 +58,7 @@ class OrderCreate(CreateView):
 
     def form_valid(self, form):
         context = self.get_context_data()
+        print(context)
         order_items = context['order_items']
 
         with transaction.atomic():
@@ -66,10 +67,10 @@ class OrderCreate(CreateView):
             if order_items.is_valid():
                 order_items.instance = self.object
                 order_items.instance.save()
-
+            print(self.object.get_total_cost())
             if self.object.get_total_cost() == 0:
-                self.object.delete()
-
+                # self.object.delete()
+                pass
         return super(OrderCreate, self).form_valid(form)
 
 
@@ -100,6 +101,7 @@ class OrderUpdate(UpdateView):
         context = self.get_context_data()
         order_items = context['order_items']
 
+
         with transaction.atomic():
             form.instance.user = self.request.user
             self.object = form.save()
@@ -108,7 +110,8 @@ class OrderUpdate(UpdateView):
                 order_items.instance.save()
 
             if self.object.get_total_cost() == 0:
-                self.object.delete()
+                # self.object.delete()
+                pass
 
         return super(OrderUpdate, self).form_valid(form)
 
