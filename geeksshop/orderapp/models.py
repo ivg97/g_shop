@@ -49,7 +49,7 @@ class Order(models.Model):
         pass
 
     def delete(self, using=None, keep_parents=False):
-        # form =
+        print(self)
         for item in self.order_items.select_related():
             item.product.quantity += item.quantity
             item.save()
@@ -79,8 +79,11 @@ def product_quantity_update_delete(sender, instance, **kwargs):
 @receiver(pre_save, sender=Basket)
 @receiver(pre_save, sender=OrderItem)
 def product_quantity_update_delete(sender, instance, **kwargs):
+    print(instance.products, 12345)
     if instance.pk:
-        instance.product.quantity -= instance.quantity - instance.get_item(int(instance.pk))
+        print(instance.products, 67890)
+        instance.products.quantity -= instance.quantity - instance.get_item(int(instance.pk))
     else:
-        instance.product.quantity -= instance.quantity
-    instance.save()
+        print(instance, 'else')
+        instance.products.quantity -= instance.quantity
+    instance.products.save()

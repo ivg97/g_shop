@@ -20,7 +20,7 @@ def products(request, category_id=None, page_id=1):
     else:
         products =Products.objects.filter(category_id=category_id).filter(active=True)
 
-    paginator = Paginator(products, per_page=3)
+    paginator = Paginator(products, per_page=5)
     try:
         products_paginator = paginator.page(page_id)
     except PageNotAnInteger:
