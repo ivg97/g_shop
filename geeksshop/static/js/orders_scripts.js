@@ -23,26 +23,26 @@ window.onload = function () {
         }
     }
 
-    // console.info('PRICE', priceArr)
-    // console.info('QUANTITY', quantityArr)
-
-    $('.order_form').on('click', 'select[name=' + 'order_items-' + (totalForms - 1).toString() + '-product]', function (){
-        let target = event.target;
-        console.log(target.value)
-
-        $.ajax({
-            url: '/orders/add_pro/' + target.value + '/',
-            success: function (data){
-                // console.log(data)
-                // $('.order_form').html(data)
-                let elem = document.getElementsByClassName('td3')
-                elem = elem[totalForms]
-                data = data + ' руб'
-                $(elem).html(data)
-            },
-        });
-        event.preventDefault()
-    })
+    // // console.info('PRICE', priceArr)
+    // // console.info('QUANTITY', quantityArr)
+    //
+    // $('.order_form').on('click', 'select[name=' + 'order_items-' + (totalForms - 1).toString() + '-product]', function (){
+    //     let target = event.target;
+    //     console.log(target.value)
+    //
+    //     $.ajax({
+    //         url: '/orders/add_pro/' + target.value + '/',
+    //         success: function (data){
+    //             // console.log(data)
+    //             // $('.order_form').html(data)
+    //             let elem = document.getElementsByClassName('td3')
+    //             elem = elem[totalForms]
+    //             data = data + ' руб'
+    //             $(elem).html(data)
+    //         },
+    //     });
+    //     event.preventDefault()
+    // })
 
 
 

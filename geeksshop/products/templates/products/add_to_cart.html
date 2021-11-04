@@ -1,10 +1,11 @@
-<div class="add-to-cart">
+
     <div class="card h-100">
-        <a href="#">
-            <img class="card-img-top"
-                 src="{{ product.image.url }}"
-                 alt="">
+        <a href="{% url 'products:detail' product.id %}">{{ product.name }}<img class="card-img-top"
+                                                                                  src="{{ product.image.url }}"
+                                                                                  alt="">
+
         </a>
+        <div class="add-to-cart">
         <div class="card-body">
             <h4 class="card-title">
                 <a href="#">{{ product.products_name }}</a>
