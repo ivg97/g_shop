@@ -43,6 +43,7 @@ class Order(models.Model):
 
     def get_total_cost(self):
         items = self.order_items.select_related()
+        # print(self.order_items)
         return sum(list(map(lambda x: x.get_product_cost(), items)))
 
     def get_items(self):
@@ -51,10 +52,16 @@ class Order(models.Model):
     def delete(self, using=None, keep_parents=False):
         # form =
         for item in self.order_items.select_related():
-            item.product.quantity += item.quantity
+            item.products.quantity += item.quantity
             item.save()
         self.is_active = False
         self.save()
+
+        def get_summary(self):
+            items = self.order_items.select_related()
+            return {
+            'get_total_cost': sum(list(map(lambda x: x.get_product_cost(), items))),
+            'get_total_quantity': sum(list(map(lambda x: x.quantity, items)))}
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name='order_items', on_delete=models.CASCADE)
@@ -80,7 +87,10 @@ def product_quantity_update_delete(sender, instance, **kwargs):
 @receiver(pre_save, sender=OrderItem)
 def product_quantity_update_delete(sender, instance, **kwargs):
     if instance.pk:
-        instance.product.quantity -= instance.quantity - instance.get_item(int(instance.pk))
+        print(1, instance, type(instance))
+        instance.products.quantity -= instance.quantity - instance.get_item(int(instance.pk))
+        instance.save()
     else:
-        instance.product.quantity -= instance.quantity
-    instance.save()
+        print(2)
+        instance.products.quantity -= instance.quantity
+        instance.save()

@@ -31,7 +31,7 @@ class OrderCreate(CreateView):
     def get_context_data(self, **kwargs):
         context = super(OrderCreate, self).get_context_data(**kwargs)
         context['title'] = 'Создать заказ'
-        context['price'] = None
+        # context['price'] = None
 
 
         OrderFormSet = inlineformset_factory(Order, OrderItem, form=OrderItemsForm, extra=1)
@@ -68,9 +68,10 @@ class OrderCreate(CreateView):
                 order_items.instance.save()
 
             if self.object.get_total_cost() == 0:
+                print(1)
                 self.object.delete()
 
-        return super(OrderCreate, self).form_valid(form)
+        return super().form_valid(form)
 
 
 class OrderUpdate(UpdateView):

@@ -1,18 +1,22 @@
-<div class="add-to-cart">
+
     <div class="card h-100">
-        <a href="#">
+        <a href="{% url 'products:product_detail' product.id product.category.id %}">
             <img class="card-img-top"
                  src="{{ product.image.url }}"
                  alt="">
         </a>
         <div class="card-body">
             <h4 class="card-title">
-                <a href="#">{{ product.products_name }}</a>
+                <a href="{% url 'products:product_detail' product.id product.category.id %}">{{ product.products_name }}</a>
             </h4>
-            <h5>{{ product.products_price }}</h5>
+            {% if product.total_sale %}
+                <h5><s>{{ product.products_price }}</s> <u style="background-color: lightpink; color:red"  >{{ product.total_price }}</u></h5>
+            {% else %}
+                <h5>{{ product.total_price }}</h5>
+            {% endif %}
             <p class="card-text">{{ product.products_descriptions }}</p>
         </div>
-
+        <div class="add-to-cart">
         <div class="card-footer text-center">
             <a href="{% url 'baskets:basket_add' product.id %}"
                class="btn btn-outline-success" name="{{ product.id }}">Отправить в корзину</a>
