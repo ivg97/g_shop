@@ -20,10 +20,10 @@ class Products(models.Model):
     active = models.BooleanField(default=True, name='active')
     sale = models.PositiveIntegerField(default=0, name='sale')
 
-    def __init__(self, *args, **kwargs):
-        super(Products, self).__init__(*args, **kwargs)
-        if self.category.discont and self.sale:
-            pass
+    # def __init__(self, *args, **kwargs):
+    #     super(Products, self).__init__(*args, **kwargs)
+    #     if self.category.discont and self.sale:
+    #         pass
             # self.products_price = self.total_price()
             # self.save()
 

@@ -31,7 +31,7 @@ class OrderCreate(CreateView):
     def get_context_data(self, **kwargs):
         context = super(OrderCreate, self).get_context_data(**kwargs)
         context['title'] = 'Создать заказ'
-        # context['price'] = None
+        context['price'] = None
 
 
         OrderFormSet = inlineformset_factory(Order, OrderItem, form=OrderItemsForm, extra=1)
@@ -60,6 +60,7 @@ class OrderCreate(CreateView):
         context = self.get_context_data()
         order_items = context['order_items']
 
+
         with transaction.atomic():
             form.instance.user = self.request.user
             self.object = form.save()
@@ -71,7 +72,7 @@ class OrderCreate(CreateView):
                 print(1)
                 self.object.delete()
 
-        return super().form_valid(form)
+        return super(OrderCreate, self).form_valid(form)
 
 
 class OrderUpdate(UpdateView):

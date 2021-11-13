@@ -49,12 +49,13 @@ class Order(models.Model):
     def get_items(self):
         pass
 
-    def delete(self, using=None, keep_parents=False):
-        # form =
+    def delete(self, using=None, keep_parents=False, num=None):
+
         for item in self.order_items.select_related():
             item.products.quantity += item.quantity
+
             item.save()
-        self.is_active = False
+        self.is_active = True
         self.save()
 
         def get_summary(self):
@@ -79,7 +80,7 @@ class OrderItem(models.Model):
 @receiver(pre_delete, sender=Basket)
 @receiver(pre_delete, sender=OrderItem)
 def product_quantity_update_delete(sender, instance, **kwargs):
-    instance.products.quantity += instance.quantity
+    instance.product.quantity += instance.quantity
     instance.save()
 
 
@@ -87,10 +88,10 @@ def product_quantity_update_delete(sender, instance, **kwargs):
 @receiver(pre_save, sender=OrderItem)
 def product_quantity_update_delete(sender, instance, **kwargs):
     if instance.pk:
-        print(1, instance, type(instance))
-        instance.products.quantity -= instance.quantity - instance.get_item(int(instance.pk))
-        instance.save()
+        # print(1, instance, type(instance))
+        instance.product.quantity = instance.quantity - instance.get_item(int(instance.pk))
+        instance.product.save()
     else:
-        print(2)
+        # print(2)
         instance.products.quantity -= instance.quantity
-        instance.save()
+        instance.products.save()
