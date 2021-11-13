@@ -1,0 +1,100 @@
+{% extends 'products/base.html' %}
+{% load static %}
+
+{% block css %}
+    <link href="{% static 'css/products.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <h1 class="my-4">GeekShop</h1>
+                <div class="list-group">
+                    <a href="{% url 'products:products_url' %}" class="list-group-item">Все</a>
+                </div>
+            </div>
+
+            <div class="col-lg-9">
+                <div class="row my-5">
+                    <div class="card" style="width: 20rem;">
+                        <img src="/media/{{ product.image }}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ product.products_name }}</h5>
+                            <p class="card-text">{{ product.products_descriptions }}</p>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                {% if product.total_sale %}
+                                    <h5><s>{{ product.products_price }}</s> <u
+                                            style="background-color: lightpink; color:red">{{ product.total_price }}</u>
+                                        руб</h5>
+                                {% else %}
+                                    <h5>{{ product.total_price }} руб</h5>
+                                {% endif %}
+                            </li>
+                            <li class="list-group-item">
+                                {% if product.total_sale %}
+                                    <h5>Все скидки на товар:</h5>
+                                    {% if product.category.discont %}
+                                        <p>1. На категорию "{{ product.category }}" - <u style="background-color: lightpink; color: red"> {{ product.category.discont }}
+                                            </u> %</p>
+                                    {% endif %}
+                                    {% if product.sale %}
+                                        <p>2. На данный товар - <u style="background-color: lightpink; color: red"> {{ product.sale }} </u> %</p>
+                                    {% endif %}
+                                    Итого: <u style="background-color: lightpink; color: red"> {{ product.total_sale }} </u> %
+                                {% endif %}
+                            </li>
+                            <li class="list-group-item">В наличии: {{ product.quantity }}</li>
+                        <li class="list-group-item">
+                            <div class="card-footer text-center">
+                            <a href="{% url 'baskets:basket_add' product.id %}"
+                               class="btn btn-outline-success" name="{{ product.id }}">Отправить в корзину</a>
+                        </div></li>
+                        </ul>
+                    </div>
+                    <div class="col" >
+                        <h4 style="color: cornflowerblue;">Рекомендуемые товары</h4>
+                        <div class="container">
+                        <div class="row">
+                            {% for product_in_category in recomm %}
+                            <div class="col">
+                            <div class="row my-3">
+                                <div class="card">
+                                    <a href="{% url 'products:product_detail' product_in_category.id product_in_category.category.id %}">
+                                    <img src="{{ product_in_category.image.url }}" class="card-img-top" alt="...">
+                                    <div class="card-body">
+                                        {% if product_in_category.category.discont or product_in_category.sale %}
+                                            <u style="background-color: lightpink; color: red">Sale - {{ product_in_category.total_sale }}</u>
+                                            {% else %}
+                                            Из категории {{ product_in_category.category }}
+                                        {% endif %}
+                                    </div>
+                                    </a>
+                                </div>
+
+                            </div>
+                            </div>
+                            {% endfor %}
+
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer %}
+    <footer class="py-5 bg-dark">
+        <div class="container">
+            <p class="m-0 text-center text-white">Copyright &copy; GeekShop 2021</p>
+        </div>
+
+    </footer>
+{% endblock %}

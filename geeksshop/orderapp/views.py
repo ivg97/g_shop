@@ -60,6 +60,7 @@ class OrderCreate(CreateView):
         context = self.get_context_data()
         order_items = context['order_items']
 
+
         with transaction.atomic():
             form.instance.user = self.request.user
             self.object = form.save()
@@ -68,6 +69,7 @@ class OrderCreate(CreateView):
                 order_items.instance.save()
 
             if self.object.get_total_cost() == 0:
+                print(1)
                 self.object.delete()
 
         return super(OrderCreate, self).form_valid(form)

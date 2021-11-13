@@ -1,3 +1,4 @@
+from django.db.models import F
 from django.shortcuts import render
 from django.shortcuts import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
@@ -12,13 +13,20 @@ from .models import Basket
 def basket_add(request, product_id):
     product = Products.objects.get(id=product_id)
     baskets = Basket.objects.filter(user=request.user, products=product)
-    if not baskets.exists():
-        Basket.objects.create(user=request.user, products=product, quantity=1)
+    if request.is_ajax():
+        if not baskets.exists():
+            Basket.objects.create(user=request.user, products=product, quantity=1)
+        else:
+            basket = baskets.first()
+            basket.quantity = F('quantity') + 1
+            basket.save()
     else:
-        basket = baskets.first()
-        basket.quantity += 1
-        basket.save()
-
+        if not baskets.exists():
+            Basket.objects.create(user=request.user, products=product, quantity=1)
+        else:
+            basket = baskets.first()
+            basket.quantity = F('quantity') + 1
+            basket.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
